@@ -1,0 +1,52 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  labels:
+    app.kubernetes.io/component: garbage-collector
+    app.kubernetes.io/instance: kargo
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: kargo
+    app.kubernetes.io/version: v0.1.0
+    helm.sh/chart: kargo-0.1.0
+  name: kargo-garbage-collector
+  namespace: kargo
+spec:
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    metadata:
+      annotations:
+        configmap/checksum: a825d50984da3ea04b6adc3590a6a9e0490ba058c6a59506bd0620bc09b1dc74
+      labels:
+        app.kubernetes.io/component: garbage-collector
+        app.kubernetes.io/instance: kargo
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: kargo
+        app.kubernetes.io/version: v0.1.0
+        helm.sh/chart: kargo-0.1.0
+    spec:
+      template:
+        metadata:
+          annotations:
+            configmap/checksum: a825d50984da3ea04b6adc3590a6a9e0490ba058c6a59506bd0620bc09b1dc74
+          labels:
+            app.kubernetes.io/component: garbage-collector
+            app.kubernetes.io/instance: kargo
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: kargo
+            app.kubernetes.io/version: v0.1.0
+            helm.sh/chart: kargo-0.1.0
+        spec:
+          containers:
+          - command:
+            - /usr/local/bin/kargo
+            - garbage-collector
+            envFrom:
+            - configMapRef:
+                name: kargo-garbage-collector
+            image: ghcr.io/akuity/kargo:v1.0.3
+            imagePullPolicy: IfNotPresent
+            name: garbage-collector
+            resources: {}
+          restartPolicy: Never
+          serviceAccountName: kargo-garbage-collector
+  schedule: 0 * * * *

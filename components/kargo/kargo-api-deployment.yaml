@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: api
+    app.kubernetes.io/instance: kargo
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: kargo
+    app.kubernetes.io/version: v0.1.0
+    helm.sh/chart: kargo-0.1.0
+  name: kargo-api
+  namespace: kargo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: api
+      app.kubernetes.io/instance: kargo
+      app.kubernetes.io/name: kargo
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        configmap/checksum: 00726de695e1c26ae362473ea4bd2bb912b7e6119a12cd57e6af1500835050e3
+        secret/checksum: 44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a
+      labels:
+        app.kubernetes.io/component: api
+        app.kubernetes.io/instance: kargo
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: kargo
+        app.kubernetes.io/version: v0.1.0
+        helm.sh/chart: kargo-0.1.0
+    spec:
+      containers:
+      - command:
+        - /usr/local/bin/kargo
+        - api
+        envFrom:
+        - configMapRef:
+            name: kargo-api
+        - secretRef:
+            name: admin-credentials
+        image: ghcr.io/akuity/kargo:v1.0.3
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          exec:
+            command:
+            - /usr/local/bin/grpc_health_probe
+            - -addr=:8080
+          initialDelaySeconds: 10
+        name: api
+        ports:
+        - containerPort: 8080
+          name: h2c
+          protocol: TCP
+        readinessProbe:
+          exec:
+            command:
+            - /usr/local/bin/grpc_health_probe
+            - -addr=:8080
+          initialDelaySeconds: 5
+        resources: {}
+      serviceAccount: kargo-api

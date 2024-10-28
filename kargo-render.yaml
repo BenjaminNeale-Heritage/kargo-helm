@@ -1,0 +1,20 @@
+configVersion: v1alpha1
+branchConfigs:
+
+  # =============== Non-production Cluster (non-production) ===============
+  - name: cluster/non-production
+    appConfigs:
+      # Kargo
+      kargo-helm:
+        configManagement:
+          path: components/kargo/helm
+          helm:
+            releaseName: kargo
+            namespace: kargo
+            valueFiles:
+              - overlays/non-production/values.yaml
+        outputPath: components/kargo
+      kargo-resources:
+        configManagement:
+          path: components/kargo/resources/overlays/non-production
+        outputPath: components/kargo

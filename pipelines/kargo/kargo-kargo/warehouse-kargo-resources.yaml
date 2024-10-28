@@ -1,0 +1,16 @@
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Warehouse
+metadata:
+  name: kargo-resources
+  namespace: kargo-kargo
+spec:
+  freightCreationPolicy: Automatic
+  interval: 5m0s
+  subscriptions:
+    - git:
+        commitSelectionStrategy: NewestFromBranch
+        discoveryLimit: 20
+        includePaths:
+          - components/kargo/resources
+        repoURL: 'https://github.com/BenjaminNeale-Heritage/github-openshift-cluster-config.git'
+        strictSemvers: true

@@ -1,0 +1,18 @@
+api:
+  adminAccount:
+    enabled: true
+  secret:
+    name: admin-credentials
+  ingress:
+    enabled: true
+  rollouts:
+    integrationEnabled: false
+  tls:
+    enabled: false
+image:
+  tag: v1.0.3
+controller:
+  argocd:
+    namespace: openshift-gitops
+  rollouts:
+    integrationEnabled: false

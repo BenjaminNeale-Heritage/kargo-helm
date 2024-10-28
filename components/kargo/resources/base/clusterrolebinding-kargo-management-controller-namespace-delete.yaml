@@ -1,0 +1,14 @@
+# This is needed due to bug in Kargo.
+# Refer: https://github.com/akuity/kargo/issues/2520
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: kargo-management-controller-namespace-delete
+subjects:
+  - kind: ServiceAccount
+    name: kargo-management-controller
+    namespace: kargo
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: kargo-management-controller-namespace-delete

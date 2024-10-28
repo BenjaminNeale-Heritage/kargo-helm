@@ -1,0 +1,19 @@
+{{- if .Values.managementController.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kargo-management-controller
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "kargo.labels" . | nindent 4 }}
+    {{- include "kargo.managementController.labels" . | nindent 4 }}
+data:
+  KARGO_NAMESPACE: {{ .Release.Namespace }}
+  {{- if .Values.controller.serviceAccount.clusterWideSecretReadingEnabled }}
+  MANAGE_CONTROLLER_ROLE_BINDINGS: "false"
+  {{- end }}
+  LOG_LEVEL: {{ quote .Values.managementController.logLevel }}
+  {{- if .Values.kubeconfigSecrets.kargo }}
+  KUBECONFIG: /etc/kargo/kubeconfigs/kubeconfig.yaml
+  {{- end }}
+{{- end }}

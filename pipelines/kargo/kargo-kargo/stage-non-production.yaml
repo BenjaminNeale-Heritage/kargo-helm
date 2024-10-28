@@ -1,0 +1,60 @@
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Stage
+metadata:
+  name: non-production
+  namespace: kargo-kargo
+spec:
+  promotionTemplate:
+    spec:
+      steps:
+        - config:
+            checkout:
+              - fromFreight: true
+                fromOrigin:
+                  kind: Warehouse
+                  name: kargo-helm
+                path: ./helm
+              - fromFreight: true
+                fromOrigin:
+                  kind: Warehouse
+                  name: kargo-resources
+                path: ./resources
+              - branch: cluster/non-production
+                create: true
+                path: ./out
+            repoURL: 'https://github.com/BenjaminNeale-Heritage/kargo-helm.git'
+          uses: git-clone
+        - uses: git-clear
+          config:
+            path: ./out
+        - uses: kustomize-build
+          config:
+            outPath: ./out/components/kargo
+            path: ./resources/components/kargo/resources/overlays/non-production
+        - uses: helm-template
+          config:
+            outPath: ./out/components/kargo
+            path: ./helm/components/kargo/helm
+            releaseName: kargo
+            valuesFiles:
+              - ./helm/components/kargo/helm/overlays/non-production/values.yaml
+        - uses: git-commit
+          as: commit
+          config:
+            message: Deploy Kargo to non-production
+            path: ./out
+        - uses: git-push
+          config:
+            path: ./out
+            targetBranch: cluster/non-production
+  requestedFreight:
+    - origin:
+        kind: Warehouse
+        name: kargo-helm
+      sources:
+        direct: true
+    - origin:
+        kind: Warehouse
+        name: kargo-resources
+      sources:
+        direct: true

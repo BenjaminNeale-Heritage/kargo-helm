@@ -17,7 +17,7 @@ jobs:
     strategy:
       matrix:
         targetBranch:
-          - cluster/non-production
+          - cluster/kargo-render-non-production
     steps:
       - name: kargo-render-by-akuity
         uses: akuity/kargo-render-action@v0.1.0-rc.40

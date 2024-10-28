@@ -2,7 +2,7 @@ configVersion: v1alpha1
 branchConfigs:
 
   # =============== Non-production Cluster (non-production) ===============
-  - name: cluster/non-production
+  - name: cluster/kargo-render-non-production
     appConfigs:
       # Kargo
       kargo-helm:

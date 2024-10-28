@@ -19,7 +19,7 @@ spec:
                   kind: Warehouse
                   name: kargo-resources
                 path: ./resources
-              - branch: cluster/non-production
+              - branch: cluster/kargo-non-production
                 create: true
                 path: ./out
             repoURL: 'https://github.com/BenjaminNeale-Heritage/kargo-helm.git'
@@ -46,7 +46,7 @@ spec:
         - uses: git-push
           config:
             path: ./out
-            targetBranch: cluster/non-production
+            targetBranch: cluster/kargo-non-production
   requestedFreight:
     - origin:
         kind: Warehouse

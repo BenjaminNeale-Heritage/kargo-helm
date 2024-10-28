@@ -1,0 +1,17 @@
+---
+# Source: kargo/templates/management-controller/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kargo-management-controller
+  namespace: kargo-kargo
+  labels:
+    helm.sh/chart: kargo-0.1.0
+    app.kubernetes.io/name: kargo
+    app.kubernetes.io/instance: kargo
+    app.kubernetes.io/version: "v0.1.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: management-controller
+data:
+  KARGO_NAMESPACE: kargo-kargo
+  LOG_LEVEL: "INFO"

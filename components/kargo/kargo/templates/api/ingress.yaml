@@ -1,0 +1,30 @@
+---
+# Source: kargo/templates/api/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kargo-api
+  namespace: kargo-kargo
+  labels:
+    helm.sh/chart: kargo-0.1.0
+    app.kubernetes.io/name: kargo
+    app.kubernetes.io/instance: kargo
+    app.kubernetes.io/version: "v0.1.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: api
+spec:
+  rules:
+  - host: "localhost"
+    http:
+      paths:
+      - pathType: ImplementationSpecific
+        path: /
+        backend:
+          service:
+            name: kargo-api
+            port:
+              number: 80
+  tls:
+  - hosts:
+    - "localhost"
+    secretName: kargo-api-ingress-cert

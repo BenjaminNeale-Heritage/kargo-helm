@@ -1,0 +1,14 @@
+---
+# Source: kargo/templates/webhooks-server/cert.yaml
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: kargo-webhooks-server
+  namespace: kargo-kargo
+spec:
+  dnsNames:
+  - kargo-webhooks-server.kargo-kargo.svc
+  issuerRef:
+    kind: Issuer
+    name: kargo-selfsigned-cert-issuer
+  secretName: kargo-webhooks-server-cert

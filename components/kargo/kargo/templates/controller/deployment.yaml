@@ -1,0 +1,46 @@
+---
+# Source: kargo/templates/controller/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kargo-controller
+  namespace: kargo-kargo
+  labels:
+    helm.sh/chart: kargo-0.1.0
+    app.kubernetes.io/name: kargo
+    app.kubernetes.io/instance: kargo
+    app.kubernetes.io/version: "v0.1.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: controller
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: kargo
+      app.kubernetes.io/instance: kargo
+      app.kubernetes.io/component: controller
+  template:
+    metadata:
+      labels:
+        helm.sh/chart: kargo-0.1.0
+        app.kubernetes.io/name: kargo
+        app.kubernetes.io/instance: kargo
+        app.kubernetes.io/version: "v0.1.0"
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/component: controller
+      annotations:
+        configmap/checksum: c91acb73a458c5ee2f989299ac4c07df1571d679dc61254e51c17b1e6028124d
+    spec:
+      serviceAccount: kargo-controller
+      containers:
+      - name: controller
+        image: ghcr.io/akuity/kargo:v1.0.3
+        imagePullPolicy: IfNotPresent
+        command: ["/usr/local/bin/kargo", "controller"]
+        envFrom:
+        - configMapRef:
+            name: kargo-controller
+        resources:
+          {}
